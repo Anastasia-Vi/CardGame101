@@ -1,0 +1,1 @@
+export { default as Singlecard } from "./card/Singlecard.svelte"
