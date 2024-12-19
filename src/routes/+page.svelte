@@ -217,27 +217,6 @@
             min-height: 100px;
             padding: 0.5rem;
         }
-    
-        /* Subtle hover effect */
-        :global(.cards-container :is(div, img)) {
-            transition: transform 0.2s ease;
-        }
-    
-        :global(.cards-container :is(div, img):hover) {
-            transform: translateY(-5px);
-        }
-    
-        @media (min-width: 768px) {
-            .game-container {
-                grid-template-rows: auto auto auto;
-                gap: 1rem;
-                padding: 1.5rem;
-            }
-    
-            .cards-container {
-                min-height: 120px;
-            }
-        }
         .table-area .cards-container {
             position: relative;
             width: 100px;  /* adjust based on your card width */
@@ -253,5 +232,23 @@
 
         .table-area .cards-container .card-wrapper:hover {
             transform: translate(calc(var(--index) * 0.3px), calc(var(--index) * 0.3px - 10px));
+        }
+        
+        @media (max-width: 767px) {
+            .game-container {
+                grid-template-rows: auto auto auto;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+    
+            .cards-container {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            align-items: center;
+            min-height: 120px;
+            padding: 0.5rem;
+            margin: 0;
+        }
         }
     </style>

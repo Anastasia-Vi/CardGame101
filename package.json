@@ -4,6 +4,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev",
+		"deploy": "git add . && git commit -m 'deploy' && git push",
 		"build": "vite build",
 		"preview": "vite preview"
 	},

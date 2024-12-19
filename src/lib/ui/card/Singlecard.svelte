@@ -64,7 +64,6 @@
     .bottom-right {
         bottom: 0;
         right: 0;
-        transform: rotate(180deg);
     }
 
     .value {
