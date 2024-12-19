@@ -105,8 +105,8 @@
                             </button>
                         {/if}
                         <div class="cards-container">
-                            {#each player1 as card}
-                            <div onclick={() => {
+                            {#each player1 as card, i}
+                            <div class="card-wrapper" onclick={() => {
                                 if(canPutOnTable(card,1)){//if fuction true, do this, 1 is the player 1 like second parameter
                                     table = [...table, card];
                                     checkIfTheCurrentPlayerNeedClose(card);
@@ -116,14 +116,15 @@
                                         didTheCurrentPlayerGetCard = false;
                                     }
                                 }   
-                            }}>
+                            }}
+                                style="--index: {i}">
                                 <Singlecard suit={card?.suit} value={card?.value} hide={false} />
                             </div>
                             {/each}
                         </div>
                     </div>
                 </Card>
-                <Card col={3}>
+                <Card col={3} mcol={3}>
                     <Deck
                             bind:this={deck}
                             bind:player1={player1} 
@@ -135,7 +136,7 @@
                             {checkIfTheCurrentPlayerNeedClose}
                             bind:shouldTakeCardForever/>
                 </Card>
-                <Card col={6}>
+                <Card col={6} mcol={6}>
                     <div class="table-area">
                         <div class="cards-container">
                             {#each table as card, i}
@@ -147,8 +148,8 @@
                         </div>
                     </div>
                 </Card>
-                <Card col={3}>
-                    <p>Who's turn is it?</p>
+                <Card col={3} mcol={3}>
+                    <p>Turn</p>
                     <p>{whoTurn}</p>
                     {#if table?.[table.length - 1]?.value === "Q"}<!--if last card is Q show selectedSuit. ?.-read the key if value exists, if Q exists read it-->
                     <Picksuit
@@ -169,8 +170,8 @@
                             </button>
                         {/if}
                         <div class="cards-container">
-                            {#each player2 as card}
-                                <div onclick={() => {
+                            {#each player2 as card, i}
+                                <div class="card-wrapper" onclick={() => {
                                     if(canPutOnTable(card,2)){
                                         table = [...table, card];
                                         checkIfTheCurrentPlayerNeedClose(card);
@@ -180,7 +181,8 @@
                                             didTheCurrentPlayerGetCard = false;
                                         }
                                     }
-                                }}>
+                                }}
+                                    style="--index: {i}">
                                     <Singlecard suit={card?.suit} value={card?.value} hide={false} />
                                 </div>
                             {/each}
@@ -197,7 +199,7 @@
             padding: 1rem;
             border-radius: 6px;
             background: white;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            
         }
     
         .player-label {
@@ -210,18 +212,10 @@
         }
     
         .cards-container {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            align-items: center;
-            min-height: 100px;
+            min-height: 140px;
             padding: 0.5rem;
-        }
-        .table-area .cards-container {
             position: relative;
-            width: 100px;  /* adjust based on your card width */
-            height: 140px; /* adjust based on your card height */
-            margin:0 auto;
+            margin:1rem auto;
         }
 
         .table-area .cards-container .card-wrapper {
@@ -233,22 +227,23 @@
         .table-area .cards-container .card-wrapper:hover {
             transform: translate(calc(var(--index) * 0.3px), calc(var(--index) * 0.3px - 10px));
         }
-        
+        .player-area .cards-container .card-wrapper {
+            position: absolute;
+            transform: translate(calc(var(--index) * 18px), calc(var(--index) * 0px));
+            transition: transform 0.2s ease;
+        }
+
+        .player-area .cards-container:hover .card-wrapper{
+            transform: translate(calc(var(--index) * 30px), calc(var(--index) * 0px));
+        }
         @media (max-width: 767px) {
             .game-container {
                 grid-template-rows: auto auto auto;
                 gap: 1rem;
                 padding: 1.5rem;
             }
-    
-            .cards-container {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            align-items: center;
-            min-height: 120px;
-            padding: 0.5rem;
-            margin: 0;
+            .player-area, .table-area {
+            padding: 0rem;  
         }
         }
     </style>

@@ -110,4 +110,13 @@
         height: 100%;
         border-radius: 8px;
     }
+    @media (max-width: 767px){/* I put here what I really need to change, DON"T COPY */
+        .card {
+            /*width: 45px;  
+            height: 60px; I can use this but I need fix suit and value or/=>*/
+            zoom: 0.7;
+        }
+        
+        
+    }
 </style>
