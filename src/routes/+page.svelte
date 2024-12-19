@@ -16,7 +16,8 @@
             return false;//I can't put card on table (look at if(canPutOnTable(card,1)) player1
         }
         if(card.value === "Q"){
-          return true; //I can put this card on table on any card
+            putQueenOnTable = true
+            return true; //I can put this card on table on any card
         }
         if(specialSuit){//if specialSuit true
             const canReturn = card.value === table[table.length - 1].value || card.suit === specialSuit; //
@@ -72,7 +73,10 @@
         }
     }
     function selectedSuit(suit){
+        whoTurn = (whoTurn ===2) ? 1 : 2
+        didTheCurrentPlayerGetCard = false
         specialSuit = suit
+        putQueenOnTable = false
     }
     function restartGame(){
         player1 = []
@@ -84,6 +88,7 @@
         shouldTakeCardForever = false
         specialSuit = false
     }
+    let putQueenOnTable = $state(false);
   </script>
     <Game
         bind:player1={player1} 
@@ -95,15 +100,6 @@
         <Grid>
                 <Card col={12}>
                     <div class="player-area player1">
-                        <h3 class="player-label">Player 1</h3>
-                        {#if player1.length > 0 && !shouldTakeCardForever && whoTurn === 1 && didTheCurrentPlayerGetCard}
-                            <button onclick={() => {
-                                whoTurn = 2
-                                didTheCurrentPlayerGetCard = false;
-                            }}>
-                                Pass
-                            </button>
-                        {/if}
                         <div class="cards-container">
                             {#each player1 as card, i}
                             <div class="card-wrapper" onclick={() => {
@@ -112,8 +108,10 @@
                                     checkIfTheCurrentPlayerNeedClose(card);
                                     player1 = player1.filter(c => c !== card);//current card clicked is removed from player1, this condition been evaulated to true for all cards in player1
                                     if(!doTheCurrentPlayerNeedClose){
-                                        whoTurn = 2;
-                                        didTheCurrentPlayerGetCard = false;
+                                        if(card.value !== "Q"){
+                                            whoTurn = 2;
+                                            didTheCurrentPlayerGetCard = false;
+                                        }
                                     }
                                 }   
                             }}
@@ -124,6 +122,13 @@
                         </div>
                     </div>
                 </Card>
+                {#if putQueenOnTable && whoTurn === 1}<!--if last card is Q show selectedSuit. ?.-read the key if value exists, if Q exists read it-->
+                    <Card>
+                        <Picksuit
+                            {selectedSuit}>
+                        </Picksuit>
+                    </Card>   
+                {/if}
                 <Card col={3} mcol={3}>
                     <Deck
                             bind:this={deck}
@@ -149,26 +154,34 @@
                     </div>
                 </Card>
                 <Card col={3} mcol={3}>
-                    <p>Turn</p>
-                    <p>{whoTurn}</p>
-                    {#if table?.[table.length - 1]?.value === "Q"}<!--if last card is Q show selectedSuit. ?.-read the key if value exists, if Q exists read it-->
-                    <Picksuit
-                    {selectedSuit}>
-                    </Picksuit>
+                    {#if player1.length > 0 && !shouldTakeCardForever && whoTurn === 1 && didTheCurrentPlayerGetCard}
+                        <button onclick={() => {
+                            whoTurn = 2
+                            didTheCurrentPlayerGetCard = false;
+                        }}>
+                            Pass
+                        </button>
+                    {:else if player2.length > 0 && !shouldTakeCardForever && whoTurn === 2 && didTheCurrentPlayerGetCard}
+                        <button onclick={() => {
+                            whoTurn = 1;
+                            didTheCurrentPlayerGetCard = false;
+                        }
+                    }>
+                            Pass
+                        </button>
+                    {:else}
+                        <p>Turn {whoTurn}</p>
                     {/if}
                 </Card>
+                {#if putQueenOnTable && whoTurn === 2}<!--if last card is Q show selectedSuit. ?.-read the key if value exists, if Q exists read it-->
+                    <Card>
+                        <Picksuit
+                            {selectedSuit}>
+                        </Picksuit>
+                    </Card>   
+                {/if}
                 <Card col={12}>
                     <div class="player-area player2">
-                        <h3 class="player-label">Player 2</h3>
-                        {#if player2.length > 0 && !shouldTakeCardForever && whoTurn === 2 && didTheCurrentPlayerGetCard}
-                            <button onclick={() => {
-                                whoTurn = 1;
-                                didTheCurrentPlayerGetCard = false;
-                            }
-                            }>
-                                Pass
-                            </button>
-                        {/if}
                         <div class="cards-container">
                             {#each player2 as card, i}
                                 <div class="card-wrapper" onclick={() => {
@@ -177,8 +190,10 @@
                                         checkIfTheCurrentPlayerNeedClose(card);
                                         player2 = player2.filter(c => c !== card);
                                         if(!doTheCurrentPlayerNeedClose){
-                                            whoTurn = 1;
-                                            didTheCurrentPlayerGetCard = false;
+                                            if(card.value !== "Q"){
+                                                whoTurn = 1;
+                                                didTheCurrentPlayerGetCard = false;
+                                            }
                                         }
                                     }
                                 }}
@@ -202,15 +217,6 @@
             
         }
     
-        .player-label {
-            font-size: 0.9rem;
-            color: #666;
-            margin: 0 0 0.5rem 0;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-    
         .cards-container {
             min-height: 140px;
             padding: 0.5rem;
@@ -229,7 +235,7 @@
         }
         .player-area .cards-container .card-wrapper {
             position: absolute;
-            transform: translate(calc(var(--index) * 18px), calc(var(--index) * 0px));
+            transform: translate(calc(var(--index) * 20px), calc(var(--index) * 0px));
             transition: transform 0.2s ease;
         }
 
