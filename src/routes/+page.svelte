@@ -250,6 +250,7 @@
             }
             .player-area, .table-area {
             padding: 0rem;  
+            background: none;
         }
             .cards-container{
                 min-height: 100px;
