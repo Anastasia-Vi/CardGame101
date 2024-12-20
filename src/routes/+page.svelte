@@ -251,5 +251,14 @@
             .player-area, .table-area {
             padding: 0rem;  
         }
+            .cards-container{
+                min-height: 100px;
+                padding: 0rem;
+                position: relative;
+                margin:0 auto;
+            }
+            .table-area .cards-container{
+                padding: 0 2rem;
+            }
         }
     </style>

@@ -98,4 +98,11 @@
         height: 100%;
         border-radius: 8px;
     }
+
+    @media(max-width: 767px){
+        .card {
+        zoom:0.6
+        }
+
+    }
 </style>
